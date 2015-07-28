@@ -1,0 +1,61 @@
+#!/bin/sh
+
+# maraschino(noun)-
+#
+
+#functions
+function usage() {
+  echo "maraschino(n)-$0"
+}
+
+function preconidtions() {
+
+  # if [ is_git ]; then
+  #   echo "Not a valid git dir"
+  # el
+
+  is_git
+  if [ "$?" -eq 0 ]; then
+    echo "Not a valid git directory."
+    exit 0
+  elif [ $# -eq 0 ]; then
+    echo "Not enough arguments"
+    usage
+    exit 0
+  fi
+}
+
+function is_git() {
+  if git rev-parse --git-dir > /dev/null 2>&1; then
+    return 1
+  fi
+  return 0
+}
+
+# run
+preconidtions "$@"
+branch=$(git rev-parse --abbrev-ref HEAD)
+depth=
+target=
+
+while [ "$1" != "" ]; do
+  echo $1
+  case $1 in
+    -t | --target)
+      shift
+      target=$1
+      ;;
+    -d | --depth)
+      shift
+      depth=$1
+      ;;
+  esac
+  shift
+done
+
+if [ -z "$target"]; then
+
+fi
+
+echo "cherry-picking tagged commits for feature $target"
+git-cmd="git log --reverse --format=\"%H\""
